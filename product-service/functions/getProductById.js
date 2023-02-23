@@ -5,8 +5,15 @@ module.exports = async function getProductById(event) {
     event.pathParameters.productId
   );
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(product),
-  };
+  if (product) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(product),
+    };
+  } else {
+    return {
+      statusCode: 404,
+      body: JSON.stringify("Product not found"),
+    };
+  }
 };
