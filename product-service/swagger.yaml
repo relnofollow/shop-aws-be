@@ -1,0 +1,87 @@
+---
+openapi: 3.0.3
+info:
+  title: AWS Shop - Product Service
+  description: A set of API methods to facilitate work of AWS-powered online shop
+  version: 1.0.0
+servers:
+- url: https://1a7okuit7a.execute-api.eu-central-1.amazonaws.com/
+tags:
+- name: products
+  description: Methods to work with products
+paths:
+  /products:
+    get:
+      tags:
+      - products
+      summary: Returns all products
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/{productId}:
+    get:
+      tags:
+      - products
+      summary: Get product info by ID
+      description: Returns a single product
+      operationId: getPetById
+      parameters:
+      - name: productId
+        in: path
+        description: ID of product to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Product not found
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 5b168ad0-0019-4df7-819d-75313cc024de
+        title:
+          type: string
+          example: Magformers Amazing Construction Set
+        company:
+          type: string
+          example: MAGFORMERS
+        description:
+          type: string
+          example: Mit dem MAGFORMERS Amazing Construction Set können Kinder aus 50 gelben und orangefarbenen Bauelementen und vielen speziellen Bauelementen mit Unterstützung der Bauanleitung oder nach ihren Vorstellungen eigenen Kräne, verschiedene Baufahrzeuge und -maschinen und viele geometrische Figuren konstruieren.
+        price:
+          type: number
+          format: float
+          example: 55.99
+        count:
+          minimum: 0
+          type: integer
+          example: 5
+        minAge:
+          maximum: 100
+          minimum: 0
+          type: integer
+          example: 3
+        reviews:
+          minimum: 0
+          type: integer
+          example: 0

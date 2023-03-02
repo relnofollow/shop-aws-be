@@ -1,0 +1,186 @@
+{
+  "product-service-dev-productsTable": [
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "5b168ad0-0019-4df7-819d-75313cc024de"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "908d6e26-75cb-4ec0-aa70-ab4a69772caf"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "99c79b84-f597-4936-90b5-6dcb09df6bbd"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "99d70ca1-6a9a-4bc6-9bc9-3033def4aaaf"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "4717ec5c-3643-4e9c-922d-f581d887314b"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "39dd2bf8-d9eb-4448-aac4-e0f1bb9f6d95"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "19fbf7ab-3698-4890-87a5-7f4bcd4dbe69"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "f8081216-1360-4206-86cc-7bdd81144cdb"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "b0fe1a68-5686-4514-a675-317f780f0515"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "id": {
+            "S": "65c0defc-6b1b-40e7-9af3-5ff8d05af54d"
+          }
+        }
+      }
+    }
+  ],
+  "product-service-dev-stocksTable": [
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "5b168ad0-0019-4df7-819d-75313cc024de"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "908d6e26-75cb-4ec0-aa70-ab4a69772caf"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "99c79b84-f597-4936-90b5-6dcb09df6bbd"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "99d70ca1-6a9a-4bc6-9bc9-3033def4aaaf"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "4717ec5c-3643-4e9c-922d-f581d887314b"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "39dd2bf8-d9eb-4448-aac4-e0f1bb9f6d95"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "19fbf7ab-3698-4890-87a5-7f4bcd4dbe69"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "f8081216-1360-4206-86cc-7bdd81144cdb"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "b0fe1a68-5686-4514-a675-317f780f0515"
+          }
+        }
+      }
+    },
+    {
+      "DeleteRequest": {
+        "Key": {
+          "product_id": {
+            "S": "65c0defc-6b1b-40e7-9af3-5ff8d05af54d"
+          }
+        }
+      }
+    }
+  ]
+}
