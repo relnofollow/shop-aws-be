@@ -1,4 +1,4 @@
-module.exports = class ProductsRepository {
+export default class ProductsRepository {
   static async getProducts() {
     return [
       {
@@ -118,4 +118,4 @@ module.exports = class ProductsRepository {
     const products = await ProductsRepository.getProducts();
     return products.find((product) => product.id === id);
   }
-};
+}

@@ -1,6 +1,4 @@
-"use strict";
+import getProductsList from "./functions/getProductsList.js";
+import getProductById from "./functions/getProductById.js";
 
-const getProductsList = require("./functions/getProductsList");
-const getProductById = require("./functions/getProductById");
-
-module.exports = { getProductsList, getProductById };
+export { getProductsList, getProductById };

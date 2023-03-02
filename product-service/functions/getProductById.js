@@ -1,6 +1,6 @@
-const ProductRepository = require("../shared/ProductsRepository");
+import ProductRepository from "../shared/ProductsRepository.js";
 
-module.exports = async function getProductById(event) {
+export default async function getProductById(event) {
   const product = await ProductRepository.getProductById(
     event.pathParameters.productId
   );
@@ -16,4 +16,4 @@ module.exports = async function getProductById(event) {
       body: JSON.stringify("Product not found"),
     };
   }
-};
+}
