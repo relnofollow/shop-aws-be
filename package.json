@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sls:product-service:load-data": "set AWS_CLI_FILE_ENCODING=UTF-8&&aws dynamodb batch-write-item --request-items file://product-service/sample-data.json --return-consumed-capacity INDEXES --return-item-collection-metrics SIZE"
+    "sls:product-service:load-data": "set AWS_CLI_FILE_ENCODING=UTF-8&&aws dynamodb batch-write-item --request-items file://product-service/data/put-sample-data.json --return-consumed-capacity INDEXES --return-item-collection-metrics SIZE"
   },
   "author": "",
   "license": "ISC",
