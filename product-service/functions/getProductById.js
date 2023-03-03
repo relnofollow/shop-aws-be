@@ -1,7 +1,7 @@
-import ProductRepository from "../shared/ProductsRepository.js";
+import productsRepository from "../shared/productsRepository.js";
 
 export default async function getProductById(event) {
-  const product = await ProductRepository.getProductById(
+  const product = await productsRepository.getProductById(
     event.pathParameters.productId
   );
 
@@ -9,6 +9,9 @@ export default async function getProductById(event) {
     return {
       statusCode: 200,
       body: JSON.stringify(product),
+      headers: {
+        "content-type": "application/json",
+      },
     };
   } else {
     return {

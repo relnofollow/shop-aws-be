@@ -1,12 +1,15 @@
-import ProductsRepository from "../shared/ProductsRepository.js";
+import productsRepository from "../shared/productsRepository.js";
 
 export default async function getProductsList(event) {
   try {
-    const products = await ProductsRepository.getProducts();
+    const products = await productsRepository.getProducts();
 
     return {
       statusCode: 200,
       body: JSON.stringify(products),
+      headers: {
+        "content-type": "application/json",
+      },
     };
   } catch (error) {
     return {

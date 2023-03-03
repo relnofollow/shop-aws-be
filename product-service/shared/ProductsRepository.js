@@ -1,4 +1,4 @@
-import { ddbDocClient } from "../shared/ddbDocClient.js";
+import { ddbDocClient } from "./ddbDocClient.js";
 import { GetCommand, PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,8 +12,8 @@ const stocksScanParams = {
   TableName: STOCKS_TABLE,
 };
 
-export default class ProductsRepository {
-  static async getProducts() {
+class ProductsRepository {
+  async getProducts() {
     const products = await ddbDocClient.send(
       new ScanCommand(productsScanParams)
     );
@@ -24,11 +24,11 @@ export default class ProductsRepository {
         (stock) => stock.product_id === product.id
       );
 
-      return ProductsRepository.combineProductWithStock(product, productStock);
+      return this.combineProductWithStock(product, productStock);
     });
   }
 
-  static async getProductById(id) {
+  async getProductById(id) {
     const productsGetByIdParams = {
       TableName: PRODUCTS_TABLE,
       Key: {
@@ -49,13 +49,13 @@ export default class ProductsRepository {
     const stock = await ddbDocClient.send(new GetCommand(stocksGetByIdParams));
 
     return product.Item && stock.Item
-      ? ProductsRepository.combineProductWithStock(product.Item, stock.Item)
+      ? this.combineProductWithStock(product.Item, stock.Item)
       : null;
   }
 
-  static async addProduct(productData, stockCount) {
-    const product = ProductsRepository.initProduct(productData);
-    const stock = ProductsRepository.initStock(product.id, stockCount);
+  async addProduct(productData, stockCount) {
+    const product = this.initProduct(productData);
+    const stock = this.initStock(product.id, stockCount);
 
     await Promise.all([
       ddbDocClient.send(
@@ -72,27 +72,31 @@ export default class ProductsRepository {
       ),
     ]);
 
-    return ProductsRepository.combineProductWithStock(product, stock);
+    return this.combineProductWithStock(product, stock);
   }
 
-  static combineProductWithStock(product, stock) {
+  combineProductWithStock(product, stock) {
     return {
       ...product,
       ...{ count: stock.count },
     };
   }
 
-  static initProduct(productData) {
+  initProduct(productData) {
     return {
       ...productData,
       ...{ id: uuidv4() },
     };
   }
 
-  static initStock(productId, count) {
+  initStock(productId, count) {
     return {
       count,
       product_id: productId,
     };
   }
 }
+
+const productsRepository = new ProductsRepository();
+
+export default productsRepository;
