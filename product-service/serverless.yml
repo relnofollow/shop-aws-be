@@ -20,9 +20,14 @@ service: product-service
 # Check out our docs for more details
 frameworkVersion: '3'
 
+custom:
+  tableNames:
+    products: ${self:service}-${sls:stage}-productsTable
+    stocks: ${self:service}-${sls:stage}-stocksTable
+
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   stage: dev
   region: eu-central-1
   httpApi:
@@ -31,6 +36,23 @@ provider:
         - http://localhost:4200
         - https://d2vtpotpr14qt7.cloudfront.net
         - https://inspector.swagger.io
+  environment:
+    PRODUCTS_TABLE: ${self:custom.tableNames.products}
+    STOCKS_TABLE: ${self:custom.tableNames.stocks}
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:PutItem'
+            - 'dynamodb:Get*'
+            - 'dynamodb:Scan*'
+            - 'dynamodb:UpdateItem'
+            - 'dynamodb:DeleteItem'
+          Resource: 
+            - 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.tableNames.products}'
+            - 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.tableNames.stocks}'
+
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -55,12 +77,11 @@ provider:
 #    variable1: value1
 
 # you can add packaging information here
-#package:
-#  patterns:
-#    - '!exclude-me.js'
-#    - '!exclude-me-dir/**'
-#    - include-me.js
-#    - include-me-dir/**
+package:
+  patterns:
+    - '!data/**'
+    - '!events/**'
+    - '!swagger.yaml'
 
 functions:
   getProductsList:
@@ -71,6 +92,10 @@ functions:
     handler: handler.getProductById
     events:
       - httpApi: 'GET /products/{productId}'
+  addProduct:
+    handler: handler.addProduct
+    events:
+      - httpApi: 'POST /products'
 
 #    Define function environment variables here
 #    environment:
@@ -87,3 +112,34 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+resources:
+  Resources:
+    ProductsTable:
+      Type: AWS::DynamoDB::Table  
+      Properties:
+        TableName: ${self:service}-${sls:stage}-productsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PROVISIONED
+        ProvisionedThroughput: 
+          ReadCapacityUnits: "5"
+          WriteCapacityUnits: "5"
+    StocksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-${sls:stage}-stocksTable
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH
+        BillingMode: PROVISIONED
+        ProvisionedThroughput: 
+          ReadCapacityUnits: "5"
+          WriteCapacityUnits: "5"
