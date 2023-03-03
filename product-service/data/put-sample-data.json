@@ -53,6 +53,9 @@
           },
           "reviews": {
             "N": "0"
+          },
+          "rating": {
+            "N": "0"
           }
         }
       }
@@ -200,6 +203,9 @@
           },
           "reviews": {
             "N": "0"
+          },
+          "rating": {
+            "N": "0"
           }
         }
       }
@@ -286,6 +292,9 @@
             "S": "Perfekt für kleine Nachwuchs-Architekten: Die bunten Holzbausteine von Eichhorn animieren den Nachwuchs dazu, fantasievolle Bauwerke zu errichten. Holzbausteine von Eichhorn Aufbewahrungsbox mit Deckel und Kordel, 100 Bauklötze in verschiedenen Formen und Farben ab 12 Monaten"
           },
           "reviews": {
+            "N": "0"
+          },
+          "rating": {
             "N": "0"
           }
         }
