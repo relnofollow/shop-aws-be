@@ -13,7 +13,7 @@ export default async function getProductById(event) {
   } else {
     return {
       statusCode: 404,
-      body: JSON.stringify("Product not found"),
+      body: "Product not found",
     };
   }
 }

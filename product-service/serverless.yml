@@ -92,6 +92,10 @@ functions:
     handler: handler.getProductById
     events:
       - httpApi: 'GET /products/{productId}'
+  addProduct:
+    handler: handler.addProduct
+    events:
+      - httpApi: 'POST /products'
 
 #    Define function environment variables here
 #    environment:

@@ -1,5 +1,6 @@
 import { ddbDocClient } from "../shared/ddbDocClient.js";
-import { GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { GetCommand, PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { v4 as uuidv4 } from "uuid";
 
 const { PRODUCTS_TABLE, STOCKS_TABLE } = process.env;
 
@@ -23,10 +24,7 @@ export default class ProductsRepository {
         (stock) => stock.product_id === product.id
       );
 
-      return {
-        ...product,
-        ...(productStock ? { count: productStock.count } : {}),
-      };
+      return ProductsRepository.combineProductWithStock(product, productStock);
     });
   }
 
@@ -51,10 +49,50 @@ export default class ProductsRepository {
     const stock = await ddbDocClient.send(new GetCommand(stocksGetByIdParams));
 
     return product.Item && stock.Item
-      ? {
-          ...product.Item,
-          ...{ count: stock.Item.count },
-        }
+      ? ProductsRepository.combineProductWithStock(product.Item, stock.Item)
       : null;
+  }
+
+  static async addProduct(productData, stockCount) {
+    const product = ProductsRepository.initProduct(productData);
+    const stock = ProductsRepository.initStock(product.id, stockCount);
+
+    await Promise.all([
+      ddbDocClient.send(
+        new PutCommand({
+          TableName: PRODUCTS_TABLE,
+          Item: product,
+        })
+      ),
+      ddbDocClient.send(
+        new PutCommand({
+          TableName: STOCKS_TABLE,
+          Item: stock,
+        })
+      ),
+    ]);
+
+    return ProductsRepository.combineProductWithStock(product, stock);
+  }
+
+  static combineProductWithStock(product, stock) {
+    return {
+      ...product,
+      ...{ count: stock.count },
+    };
+  }
+
+  static initProduct(productData) {
+    return {
+      ...productData,
+      ...{ id: uuidv4() },
+    };
+  }
+
+  static initStock(productId, count) {
+    return {
+      count,
+      product_id: productId,
+    };
   }
 }
