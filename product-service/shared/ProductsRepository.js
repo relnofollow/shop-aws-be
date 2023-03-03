@@ -1,5 +1,9 @@
 import { ddbDocClient } from "./ddbDocClient.js";
-import { GetCommand, PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  GetCommand,
+  ScanCommand,
+  TransactWriteCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 
 const { PRODUCTS_TABLE, STOCKS_TABLE } = process.env;
@@ -57,20 +61,24 @@ class ProductsRepository {
     const product = this.initProduct(productData);
     const stock = this.initStock(product.id, stockCount);
 
-    await Promise.all([
-      ddbDocClient.send(
-        new PutCommand({
-          TableName: PRODUCTS_TABLE,
-          Item: product,
-        })
-      ),
-      ddbDocClient.send(
-        new PutCommand({
-          TableName: STOCKS_TABLE,
-          Item: stock,
-        })
-      ),
-    ]);
+    await ddbDocClient.send(
+      new TransactWriteCommand({
+        TransactItems: [
+          {
+            Put: {
+              TableName: PRODUCTS_TABLE,
+              Item: product,
+            },
+          },
+          {
+            Put: {
+              TableName: STOCKS_TABLE,
+              Item: stock,
+            },
+          },
+        ],
+      })
+    );
 
     return this.combineProductWithStock(product, stock);
   }
