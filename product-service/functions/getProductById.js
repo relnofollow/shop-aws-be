@@ -1,22 +1,29 @@
 import productsRepository from "../shared/productsRepository.js";
 
 export default async function getProductById(event) {
-  const product = await productsRepository.getProductById(
-    event.pathParameters.productId
-  );
+  try {
+    const product = await productsRepository.getProductById(
+      event.pathParameters.productId
+    );
 
-  if (product) {
+    if (product) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(product),
+        headers: {
+          "content-type": "application/json",
+        },
+      };
+    } else {
+      return {
+        statusCode: 404,
+        body: "Product not found",
+      };
+    }
+  } catch (error) {
     return {
-      statusCode: 200,
-      body: JSON.stringify(product),
-      headers: {
-        "content-type": "application/json",
-      },
-    };
-  } else {
-    return {
-      statusCode: 404,
-      body: "Product not found",
+      statusCode: 500,
+      body: error.message,
     };
   }
 }
