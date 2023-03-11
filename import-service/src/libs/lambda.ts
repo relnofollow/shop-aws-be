@@ -1,5 +1,4 @@
 import middy from "@middy/core";
-import middyJsonBodyParser from "@middy/http-json-body-parser";
 
 export function logRequest() {
   const logRequestBefore = async (request) => {
@@ -25,7 +24,6 @@ export function handleError() {
   };
 }
 
-
 export const middyfy = (handler) => {
-  return middy(handler).use(middyJsonBodyParser()).use(logRequest()).use(handleError());
-}
+  return middy(handler).use(logRequest()).use(handleError());
+};

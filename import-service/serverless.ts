@@ -1,6 +1,7 @@
 import type { AWS } from "@serverless/typescript";
 
 import importProductFile from "@functions/importProductFile";
+import importFileParser from "@functions/importFileParser";
 
 const serverlessConfiguration: AWS = {
   service: "import-service",
@@ -33,7 +34,7 @@ const serverlessConfiguration: AWS = {
         statements: [
           {
             Effect: "Allow",
-            Action: "s3:PutObject",
+            Action: ["s3:PutObject", "s3:GetObject"],
             Resource:
               "arn:aws:s3:::${self:provider.environment.BUCKET_IMPORT}/*",
           },
@@ -42,7 +43,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { importProductFile },
+  functions: { importProductFile, importFileParser },
   package: { individually: true },
   custom: {
     esbuild: {
