@@ -1,0 +1,9 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": null,
+  "queryStringParameters": {
+    "name": "products-20230309.csv"
+  }
+}
