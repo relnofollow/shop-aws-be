@@ -16,7 +16,7 @@ const createPresignedUrlWithClient = async ({ key }) => {
   return getSignedUrl(client, command, { expiresIn: 3600 });
 };
 
-const importProductFile = async (event: APIGatewayProxyEvent) => {
+const importProductsFile = async (event: APIGatewayProxyEvent) => {
   const fileName = event.queryStringParameters?.name;
 
   if (!fileName) {
@@ -38,4 +38,4 @@ const importProductFile = async (event: APIGatewayProxyEvent) => {
   };
 };
 
-export const main = middyfy(importProductFile);
+export const main = middyfy(importProductsFile);
