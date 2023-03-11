@@ -27,7 +27,7 @@
           "arn": "arn:aws:s3:::constructor-shop-957659-import"
         },
         "object": {
-          "key": "uploaded%2Ftest.csv",
+          "key": "uploaded%2Fproducts-import-20230310.csv",
           "size": 1024,
           "eTag": "0123456789abcdef0123456789abcdef",
           "sequencer": "0A1B2C3D4E5F678901"
