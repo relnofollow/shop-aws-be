@@ -41,11 +41,22 @@ async function catalogBatchProcessHandler(event) {
 }
 
 const clientSNS = new SNSClient({ region: process.env.AWS_REGION });
+const COMPANY_LEGO = "LEGO";
 
 async function sendSNSMessage(products) {
   const command = new PublishCommand({
     TopicArn: process.env.CREATE_PRODUCT_TOPIC_ARN,
     Subject: "New products were added",
+    MessageAttributes: {
+      company: {
+        DataType: "String",
+        StringValue: products
+          .map((product) => product.company)
+          .includes(COMPANY_LEGO)
+          ? COMPANY_LEGO
+          : products[0].company,
+      },
+    },
     Message: `New products were added:
 
 ${JSON.stringify(products, null, "  ")}`,

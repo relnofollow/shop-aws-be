@@ -171,6 +171,15 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         TopicName: createProductTopic
+    CreateProductTopicSubscriptionLEGO:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        TopicArn:
+          Ref: CreateProductTopic
+        Endpoint: elena+kim3011@gmail.com
+        FilterPolicy: "{ \"company\": [\"LEGO\"] }"
+        FilterPolicyScope: MessageAttributes
     CreateProductTopicSubscription:
       Type: AWS::SNS::Subscription
       Properties:
@@ -178,3 +187,5 @@ resources:
         TopicArn:
           Ref: CreateProductTopic
         Endpoint: elena.kim3011@gmail.com
+        FilterPolicy: "{ \"company\": [{\"anything-but\": \"LEGO\"}] }"
+        FilterPolicyScope: MessageAttributes
