@@ -39,6 +39,7 @@ provider:
   environment:
     PRODUCTS_TABLE: ${self:custom.tableNames.products}
     STOCKS_TABLE: ${self:custom.tableNames.stocks}
+    CREATE_PRODUCT_TOPIC_ARN: !Ref CreateProductTopic
   iam:
     role:
       statements:
@@ -59,6 +60,10 @@ provider:
             - Fn::GetAtt:
               - CatalogItemsQueue
               - Arn
+        - Effect: 'Allow'
+          Action:
+            - 'sns:*'
+          Resource: !Ref CreateProductTopic
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -162,3 +167,14 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:service}-${sls:stage}-catalogItemsQueue
+    CreateProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    CreateProductTopicSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        TopicArn:
+          Ref: CreateProductTopic
+        Endpoint: elena.kim3011@gmail.com
