@@ -1,9 +1,6 @@
-import {
-  APIGatewayTokenAuthorizerEvent,
-  AuthResponse,
-  PolicyDocument,
-  Statement,
-} from "aws-lambda";
+import { logRequest } from "@libs/lambda";
+import middy from "@middy/core";
+import { AuthResponse, PolicyDocument } from "aws-lambda";
 
 enum Effect {
   ALLOW = "Allow",
@@ -52,24 +49,20 @@ function generatePolicy(
   return authResponse;
 }
 
-const basicAuthorizer = async (event: APIGatewayTokenAuthorizerEvent) => {
-  if (event.type !== "TOKEN") {
-    return 401;
-  }
-
-  const { authorizationToken } = event;
-
-  if (!authorizationToken) {
-    return "Unauthorized";
-  }
+const basicAuthorizer = async (event) => {
+  const authorizationToken = event.headers["authorization"];
 
   const [isAuthorized, user] = authorize(authorizationToken);
 
-  return generatePolicy(
+  const policy = generatePolicy(
     user,
     isAuthorized ? Effect.ALLOW : Effect.DENY,
-    event.methodArn
+    event.routeArn
   );
+
+  console.log("Generated policy: ", JSON.stringify(policy, null, "  "));
+
+  return policy;
 };
 
-export { basicAuthorizer as main };
+export const main = middy(basicAuthorizer).use(logRequest());
