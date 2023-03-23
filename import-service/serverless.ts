@@ -19,6 +19,8 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
       BUCKET_IMPORT: "constructor-shop-957659-import",
+      SQS_URL:
+        "https://sqs.eu-central-1.amazonaws.com/240983830311/product-service-dev-catalogItemsQueue",
     },
     httpApi: {
       cors: {
@@ -42,6 +44,12 @@ const serverlessConfiguration: AWS = {
             ],
             Resource:
               "arn:aws:s3:::${self:provider.environment.BUCKET_IMPORT}/*",
+          },
+          {
+            Effect: "Allow",
+            Action: ["sqs:*"],
+            Resource:
+              "arn:aws:sqs:eu-central-1:240983830311:product-service-dev-catalogItemsQueue",
           },
         ],
       },

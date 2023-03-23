@@ -39,6 +39,7 @@ provider:
   environment:
     PRODUCTS_TABLE: ${self:custom.tableNames.products}
     STOCKS_TABLE: ${self:custom.tableNames.stocks}
+    CREATE_PRODUCT_TOPIC_ARN: !Ref CreateProductTopic
   iam:
     role:
       statements:
@@ -52,7 +53,17 @@ provider:
           Resource: 
             - 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.tableNames.products}'
             - 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.tableNames.stocks}'
-
+        - Effect: 'Allow'
+          Action:
+            - 'sqs:*'
+          Resource:
+            - Fn::GetAtt:
+              - CatalogItemsQueue
+              - Arn
+        - Effect: 'Allow'
+          Action:
+            - 'sns:*'
+          Resource: !Ref CreateProductTopic
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -96,6 +107,15 @@ functions:
     handler: handler.addProduct
     events:
       - httpApi: 'POST /products'
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - CatalogItemsQueue
+              - Arn
+          batchSize: 5
 
 #    Define function environment variables here
 #    environment:
@@ -143,3 +163,29 @@ resources:
         ProvisionedThroughput: 
           ReadCapacityUnits: "5"
           WriteCapacityUnits: "5"
+    CatalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${sls:stage}-catalogItemsQueue
+    CreateProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    CreateProductTopicSubscriptionLEGO:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        TopicArn:
+          Ref: CreateProductTopic
+        Endpoint: elena+kim3011@gmail.com
+        FilterPolicy: "{ \"company\": [\"LEGO\"] }"
+        FilterPolicyScope: MessageAttributes
+    CreateProductTopicSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        TopicArn:
+          Ref: CreateProductTopic
+        Endpoint: elena.kim3011@gmail.com
+        FilterPolicy: "{ \"company\": [{\"anything-but\": \"LEGO\"}] }"
+        FilterPolicyScope: MessageAttributes
