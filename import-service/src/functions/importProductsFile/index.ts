@@ -1,12 +1,15 @@
-import { handlerPath } from '@libs/handler-resolver';
+import { handlerPath } from "@libs/handler-resolver";
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
   events: [
     {
       httpApi: {
-        method: 'GET',
-        path: '/import'
+        method: "GET",
+        path: "/import",
+        authorizer: {
+          name: "basicAuthorizer",
+        },
       },
     },
   ],

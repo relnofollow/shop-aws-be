@@ -23,6 +23,15 @@ const serverlessConfiguration: AWS = {
         "https://sqs.eu-central-1.amazonaws.com/240983830311/product-service-dev-catalogItemsQueue",
     },
     httpApi: {
+      authorizers: {
+        basicAuthorizer: {
+          type: "request",
+          functionArn:
+            "arn:aws:lambda:eu-central-1:240983830311:function:authorization-service-dev-basicAuthorizer",
+          identitySource: ["$request.header.Authorization"],
+          payloadVersion: "2.0",
+        },
+      },
       cors: {
         allowedOrigins: [
           "http://localhost:4200",

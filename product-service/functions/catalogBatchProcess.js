@@ -33,11 +33,14 @@ async function catalogBatchProcessHandler(event) {
     messages.map((message) => addProductFromMessage(message))
   );
 
-  console.log(`Successfully added ${result.filter(Boolean).length} products`);
+  const addedProducts = result.filter(Boolean);
 
-  await sendSNSMessage(result.filter(Boolean));
+  console.log(`Successfully added ${addedProducts.length} products`);
 
-  console.log("Successfully sent SNS message");
+  if (addedProducts.length) {
+    await sendSNSMessage(result.filter(Boolean));
+    console.log("Successfully sent SNS message");
+  }
 }
 
 const clientSNS = new SNSClient({ region: process.env.AWS_REGION });
